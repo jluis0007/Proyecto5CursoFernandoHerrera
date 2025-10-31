@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const CustomPagination = ({ totalPages }: Props) => {
-  let page = 1;
+  const page = 1;
   return (
     <>
       {/* Pagination */}
