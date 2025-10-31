@@ -8,27 +8,32 @@ interface Props {
   active: boolean;
   marca: string;
   isHeroe: boolean;
-  heroe: string;
+  name: string;
+  alias: string;
   description: string;
-  league: string;
-  firstAppeared: string;
+  team: string;
+  firstAppeard: string;
+  powers: string[];
+  /* strength: number; */
 }
 
 export const HeroGridCard = ({
   active,
   marca,
   isHeroe,
-  heroe,
+  name,
+  alias,
   description,
-  league,
-  firtsAppeard,
+  team,
+  firstAppeard,
+  powers,
 }: Props) => {
   return (
     <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-white to-gray-50">
       <div className="relative h-64 overflow-hidden">
         <img
           src="/placeholder.svg?height=300&width=300"
-          alt={heroe}
+          alt={alias}
           className="object-cover transition-all duration-500 group-hover:scale-110"
         />
 
@@ -70,15 +75,15 @@ export const HeroGridCard = ({
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start">
           <div className="space-y-1">
-            <h3 className="font-bold text-lg leading-tight">Superman</h3>
-            <p className="text-sm text-gray-600">Clark Kent</p>
+            <h3 className="font-bold text-lg leading-tight">{alias}</h3>
+            <p className="text-sm text-gray-600">{name}</p>
           </div>
           <Badge className="text-xs bg-green-100 text-green-800 border-green-200">
             {isHeroe ? "Heroe" : "Villano"}
           </Badge>
         </div>
         <Badge variant="outline" className="w-fit text-xs">
-          {league}
+          {team}
         </Badge>
       </CardHeader>
 
@@ -92,28 +97,28 @@ export const HeroGridCard = ({
               <Zap className="h-3 w-3 text-orange-500" />
               <span className="text-xs font-medium">Strength</span>
             </div>
-            <Progress value={100} className="h-2" />
+            <Progress value={100} className="h-2" activeColor="bg-orange-500" />
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-1">
               <Brain className="h-3 w-3 text-blue-500" />
               <span className="text-xs font-medium">Intelligence</span>
             </div>
-            <Progress value={80} className="h-2" />
+            <Progress value={80} className="h-2" activeColor="bg-blue-500" />
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-1">
               <Gauge className="h-3 w-3 text-green-500" />
               <span className="text-xs font-medium">Speed</span>
             </div>
-            <Progress value={90} className="h-2" />
+            <Progress value={90} className="h-2" activeColor="bg-green-500" />
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-1">
               <Shield className="h-3 w-3 text-purple-500" />
               <span className="text-xs font-medium">Durability</span>
             </div>
-            <Progress value={100} className="h-2" />
+            <Progress value={100} className="h-2" activeColor="bg-purple-500" />
           </div>
         </div>
 
@@ -122,10 +127,10 @@ export const HeroGridCard = ({
           <h4 className="font-medium text-sm">Powers:</h4>
           <div className="flex flex-wrap gap-1">
             <Badge variant="outline" className="text-xs">
-              Super Strength
+              {powers[0]}
             </Badge>
             <Badge variant="outline" className="text-xs">
-              Flight
+              {powers[1]}
             </Badge>
             <Badge variant="outline" className="text-xs bg-gray-100">
               +4 more
@@ -134,7 +139,7 @@ export const HeroGridCard = ({
         </div>
 
         <div className="text-xs text-gray-500 pt-2 border-t">
-          First appeared: {firtsAppeard}
+          First appeared: {firstAppeard}
         </div>
       </CardContent>
     </Card>
