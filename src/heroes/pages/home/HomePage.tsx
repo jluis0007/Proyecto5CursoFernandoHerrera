@@ -1,11 +1,15 @@
-import { Heart, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { CustomJumbotron } from "@/components/custom/CustomJumbotron";
 import { HeroStats } from "../../components/HeroStats";
 import { HeroGrid } from "@/heroes/components/HeroGrid";
+import { useState } from "react";
 
 export const HomePage = () => {
+  const [activeTab, setActiveTab] = useState<
+    "all" | "favorites" | "heroes" | "villains"
+  >("all");
   return (
     <>
       <>
@@ -20,20 +24,48 @@ export const HomePage = () => {
         {/* Controls */}
 
         {/* Tabs */}
-        <Tabs value="all" className="mb-8">
+        <Tabs value={activeTab} className="mb-8">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="all">All Characters (16)</TabsTrigger>
-            <TabsTrigger value="favorites" className="flex items-center gap-2">
-              <Heart className="h-4 w-4" />
+            <TabsTrigger value="all" onClick={() => setActiveTab("all")}>
+              All Characters (16)
+            </TabsTrigger>
+            <TabsTrigger
+              value="favorites"
+              className="flex items-center gap-2"
+              onClick={() => setActiveTab("favorites")}
+            >
               Favorites (3)
             </TabsTrigger>
-            <TabsTrigger value="heroes">Heroes (12)</TabsTrigger>
-            <TabsTrigger value="villains">Villains (2)</TabsTrigger>
+            <TabsTrigger value="heroes" onClick={() => setActiveTab("heroes")}>
+              Heroes (12)
+            </TabsTrigger>
+            <TabsTrigger
+              value="villains"
+              onClick={() => setActiveTab("villains")}
+            >
+              Villains (2)
+            </TabsTrigger>
           </TabsList>
+          <TabsContent value="all">
+            {/* Character Grid Mostrar todos los personajes*/}
+            <HeroGrid />
+          </TabsContent>
+          <TabsContent value="favorites">
+            {/* Character Grid Mostrar todos los personajes favoritos*/}
+            <h1>Favoritos</h1>
+            <HeroGrid />
+          </TabsContent>
+          <TabsContent value="heroes">
+            {/* Character Grid Mostrar todos los personajes héroes*/}
+            <h1>Héroes</h1>
+            <HeroGrid />
+          </TabsContent>
+          <TabsContent value="villains">
+            {/* Character Grid Mostrar todos los personajes villanos*/}
+            <h1>Villanos</h1>
+            <HeroGrid />
+          </TabsContent>
         </Tabs>
-
-        {/* Character Grid */}
-        <HeroGrid />
 
         {/* Pagination */}
         <div className="flex items-center justify-center space-x-2">
