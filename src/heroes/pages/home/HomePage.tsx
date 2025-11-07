@@ -12,6 +12,8 @@ import { getHeroesByPageAction } from "@/heroes/actions/get-heroes-by-page.actio
 export const HomePage = () => {
   const [searchparams, setSearchParams] = useSearchParams();
   const activeTab = searchparams.get("tab") ?? "all";
+  const page = searchparams.get("page") ?? "1";
+  const limit = searchparams.get("limit") ?? "6";
 
   const selectedTab = useMemo(() => {
     const validTabs = ["all", "favorites", "heroes", "villains"];
@@ -24,7 +26,7 @@ export const HomePage = () => {
 
   const { data: heroesResponse } = useQuery({
     queryKey: ["heroes"],
-    queryFn: () => getHeroesByPageAction(),
+    queryFn: () => getHeroesByPageAction(+page, +limit),
     staleTime: 1000 * 60 * 5,
   });
   //console.log({ heroesResponse });
