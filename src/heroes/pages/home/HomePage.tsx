@@ -7,7 +7,8 @@ import { HeroStats } from "../../components/HeroStats";
 import { HeroGrid } from "@/heroes/components/HeroGrid";
 import { CustomPagination } from "@/components/custom/CustomPagination";
 import { CustomBreadcrums } from "@/components/custom/CustomBreadcrums";
-import { getHeroesByPageAction } from "@/heroes/actions/get-heroes-by-page.action";
+import { useHeroSummary } from "@/heroes/hooks/useHeroSummary";
+import { usePaginateHero } from "@/heroes/hooks/usePaginateHero";
 
 export const HomePage = () => {
   const [searchparams, setSearchParams] = useSearchParams();
@@ -20,20 +21,8 @@ export const HomePage = () => {
     return validTabs.includes(activeTab) ? activeTab : "all";
   }, [activeTab]);
 
-  /*  const [activeTab, setActiveTab] = useState<
-    "all" | "favorites" | "heroes" | "villains"
-  >("all"); */
-
-  const { data: heroesResponse } = useQuery({
-    queryKey: ["heroes", { page, limit }],
-    queryFn: () => getHeroesByPageAction(+page, +limit),
-    staleTime: 1000 * 60 * 5,
-  });
-  //console.log({ heroesResponse });
-
-  /* useEffect(() => {
-    getHeroesByPage().then();
-  }, []); */
+  const { data: summary } = useHeroSummary();
+  const { data: heroesResponse } = usePaginateHero(+page, +limit);
 
   return (
     <>
@@ -58,7 +47,7 @@ export const HomePage = () => {
               value="all"
               onClick={() => setSearchParams("?tab=all")}
             >
-              All Characters (16)
+              All Characters ({summary?.totalHeroes})
             </TabsTrigger>
             <TabsTrigger
               value="favorites"
@@ -81,7 +70,7 @@ export const HomePage = () => {
                 })
               }
             >
-              Heroes (12)
+              Heroes ({summary?.heroCount})
             </TabsTrigger>
             <TabsTrigger
               value="villains"
@@ -92,7 +81,7 @@ export const HomePage = () => {
                 })
               }
             >
-              Villains (2)
+              Villains ({summary?.villainCount})
             </TabsTrigger>
           </TabsList>
 
