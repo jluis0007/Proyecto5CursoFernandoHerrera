@@ -1,40 +1,29 @@
-import { useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Zap, Brain, Gauge, Users, Star, Award } from "lucide-react";
-
-/* const { superheroData } = getHero('1'); */
-const superheroData = {
-  id: "1",
-  name: "Clark Kent",
-  alias: "Superman",
-  powers: [
-    "Súper fuerza",
-    "Vuelo",
-    "Visión de calor",
-    "Visión de rayos X",
-    "Invulnerabilidad",
-    "Súper velocidad",
-  ],
-  description:
-    "El Último Hijo de Krypton, protector de la Tierra y símbolo de esperanza para toda la humanidad.",
-  strength: 10,
-  intelligence: 8,
-  speed: 9,
-  durability: 10,
-  team: "Liga de la Justicia",
-  image: "/placeholder.svg?height=300&width=300",
-  firstAppearance: "1938",
-  status: "Activo",
-  category: "Héroe",
-  universe: "DC",
-};
+import { getHeroAction } from "@/heroes/actions/get-hero.action";
 
 export const HeroPage = () => {
-  const { isSlug = "" } = useParams();
-  console.log({ isSlug });
+  const { idSlug = "" } = useParams();
+
+  const { data: superheroData, isError } = useQuery({
+    queryKey: ["heroes", idSlug],
+    queryFn: () => getHeroAction(idSlug),
+    retry: false,
+  });
+
+  if (isError) {
+    return <Navigate to="/" />;
+  }
+
+  if (!superheroData) {
+    return <h3>Loading...</h3>;
+  }
+
   const totalPower =
     superheroData.strength +
     superheroData.intelligence +
@@ -75,13 +64,13 @@ export const HeroPage = () => {
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="relative">
-              {/* <Image
+              <img
                 src={superheroData.image || "/placeholder.svg"}
                 alt={superheroData.alias}
                 width={200}
                 height={200}
                 className="rounded-full border-4 border-white/20 shadow-2xl"
-              /> */}
+              />
               <div className="absolute -top-2 -right-2">
                 <div className="bg-yellow-400 text-black rounded-full p-2">
                   <Star className="w-6 h-6" />
