@@ -1,12 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Filter, Grid, Plus, Search, SortAsc } from "lucide-react";
+import React, { useRef } from "react";
+import { useSearchParams } from "react-router";
 
 /* interface Props {
 
 } */
 
 export const SearchControls = (/* {}:Props */) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      console.log("inputRef.current?.value", inputRef.current?.value);
+      const value = inputRef.current?.value ?? "";
+      setSearchParams((prev) => {
+        prev.set("name", value);
+        return prev;
+      });
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-4 mb-8">
@@ -14,8 +30,12 @@ export const SearchControls = (/* {}:Props */) => {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
           <Input
+            ref={inputRef}
             placeholder="Search heroes, villains, powers, teams..."
             className="pl-12 h-12 text-lg bg-white"
+            /* onChange= {(event) => setQuery(event.target.value)}  NO SE OCUPA PORQUE AL HACER REF EL INPUT YA SABE COMO COMPORTARSE*/
+            onKeyDown={handleKeyDown}
+            defaultValue={searchParams.get("name") ?? ""}
           />
         </div>
 
